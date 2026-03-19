@@ -167,7 +167,7 @@
             <h2 class="section-title text-3xl md:text-4xl font-bold mb-12 text-center text-gradient">Proyek & Inovasi</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 
-                <div id="lids-card" onclick="openModal()" class="project-card glass-card p-8 rounded-2xl group cursor-pointer relative overflow-hidden">
+                <div onclick="openModal('lids-modal')" class="project-card glass-card p-8 rounded-2xl group cursor-pointer relative overflow-hidden">
                     <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition">
                         <i class="fas fa-server text-8xl text-brandBlue"></i>
                     </div>
@@ -178,7 +178,7 @@
                     </p>
                 </div>
 
-                <div class="project-card glass-card p-8 rounded-2xl group cursor-pointer relative overflow-hidden">
+                <div onclick="openModal('hplc-modal')" class="project-card glass-card p-8 rounded-2xl group cursor-pointer relative overflow-hidden">
                     <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition">
                         <i class="fas fa-stopwatch text-8xl text-brandGreen"></i>
                     </div>
@@ -189,7 +189,7 @@
                     </p>
                 </div>
 
-                <div class="project-card glass-card p-8 rounded-2xl group cursor-pointer relative overflow-hidden">
+                <div onclick="openModal('malvern-modal')" class="project-card glass-card p-8 rounded-2xl group cursor-pointer relative overflow-hidden">
                     <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition">
                         <i class="fas fa-microscope text-8xl text-gray-400"></i>
                     </div>
@@ -256,6 +256,53 @@
             <div class="mt-10 rounded-xl bg-black/50 border border-white/10 h-48 flex items-center justify-center text-gray-500 flex-col">
                 <i class="fas fa-image text-3xl mb-2"></i>
                 <span class="text-sm">[Tempat Screenshot Aplikasi LIDS Anda Nanti]</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="hplc-modal" class="modal-overlay fixed inset-0 z-[100] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 backdrop-blur-sm bg-black/60 p-4">
+        <div class="modal-content glass-card w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-3xl p-8 relative transform scale-95 transition-transform duration-300">
+            <button onclick="closeModal('hplc-modal')" class="absolute top-6 right-6 text-gray-400 hover:text-white transition w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            <h2 class="text-3xl font-bold mb-2 text-brandGreen">Efisiensi Analisis HPLC</h2>
+            <p class="text-gray-400 mb-8">Kompetisi Inovasi Tingkat Nasional</p>
+            
+            <div class="space-y-6 text-gray-300 leading-relaxed">
+                <p>Proyek ini berangkat dari kebutuhan laboratorium untuk meningkatkan <i>throughput</i> sampel harian tanpa mengorbankan akurasi. Bersama tim laboratorium, kami menganalisis metode pengujian yang sedang berjalan dan menemukan <i>bottleneck</i> pada waktu pembacaan instrumen HPLC.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+                    <div class="bg-white/5 p-4 rounded-xl border border-white/10 text-center">
+                        <span class="block text-sm text-gray-400 mb-1">Retention Time Awal</span>
+                        <span class="text-3xl font-bold text-red-400">30 Menit</span>
+                    </div>
+                    <div class="bg-white/5 p-4 rounded-xl border border-brandGreen/30 text-center">
+                        <span class="block text-sm text-gray-400 mb-1">Retention Time Baru</span>
+                        <span class="text-3xl font-bold text-brandGreen">17 Menit</span>
+                    </div>
+                </div>
+
+                <p>Melalui serangkaian optimasi parameter (seperti penyesuaian fase gerak, laju alir, dan suhu kolom), kami berhasil menekan <i>retention time</i> secara signifikan. Inovasi ini tidak hanya memangkas waktu analisis hampir 45%, tetapi juga menghemat penggunaan pelarut kimia (<i>solvent</i>) dan berhasil menembus kompetisi inovasi hingga ke tingkat nasional.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="malvern-modal" class="modal-overlay fixed inset-0 z-[100] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 backdrop-blur-sm bg-black/60 p-4">
+        <div class="modal-content glass-card w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-3xl p-8 relative transform scale-95 transition-transform duration-300">
+            <button onclick="closeModal('malvern-modal')" class="absolute top-6 right-6 text-gray-400 hover:text-white transition w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            <h2 class="text-3xl font-bold mb-2 text-gray-200">Standardisasi Malvern Particle Size</h2>
+            <p class="text-gray-400 mb-8">Validasi Instrumen & Pembuatan SOP Tahun 2023</p>
+            
+            <div class="space-y-6 text-gray-300 leading-relaxed">
+                <p>Kehadiran teknologi baru di laboratorium menuntut adaptasi dan validasi yang ketat. Pada tahun 2023, laboratorium beralih dari penggunaan alat <i>Robot Sifter</i> konvensional ke instrumen analitik modern, Malvern Particle Size Analyzer.</p>
+                
+                <ul class="list-disc list-inside space-y-3 ml-2 text-gray-400">
+                    <li><strong class="text-white">Conditioning Alat:</strong> Melakukan instalasi awal dan konfigurasi parameter sistem agar sesuai dengan spesifikasi produk kimia yang diuji.</li>
+                    <li><strong class="text-white">Komparasi Metode:</strong> Melakukan uji sampel paralel antara <i>Robot Sifter</i> lama dan <i>Malvern</i> baru untuk memastikan korelasi data dan akurasi distribusi ukuran partikel.</li>
+                    <li><strong class="text-white">Penyusunan SOP:</strong> Membakukan seluruh hasil validasi dan parameter optimal ke dalam dokumen <i>Standard Operating Procedure</i> (SOP) resmi yang kini menjadi pedoman operasional analis sehari-hari.</li>
+                </ul>
             </div>
         </div>
     </div>
@@ -354,27 +401,32 @@
         const modal = document.getElementById('lids-modal');
         const modalContent = document.getElementById('modal-content');
 
-        // Tambahkan id="lids-card" dan event onClick pada div project LIDS di HTML sebelumnya
-        // Contoh: <div id="lids-card" onclick="openModal()" class="project-card glass-card...">
-
-        function openModal() {
+        // Fungsi Modal Dinamis
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            const modalContent = modal.querySelector('.modal-content') || modal.querySelector('.glass-card');
+            
             modal.classList.remove('opacity-0', 'pointer-events-none');
             modalContent.classList.remove('scale-95');
             modalContent.classList.add('scale-100');
-            document.body.style.overflow = 'hidden'; // Mencegah scroll di background
+            document.body.style.overflow = 'hidden'; // Kunci scroll background
         }
 
-        function closeModal() {
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            const modalContent = modal.querySelector('.modal-content') || modal.querySelector('.glass-card');
+            
             modal.classList.add('opacity-0', 'pointer-events-none');
             modalContent.classList.remove('scale-100');
             modalContent.classList.add('scale-95');
-            document.body.style.overflow = 'auto'; // Mengembalikan scroll
+            document.body.style.overflow = 'auto'; // Buka kunci scroll
         }
 
-        // Tutup modal jika user mengklik area luar modal
-        modal.addEventListener('click', function(e) {
-            if (e.target === modal) {
-                closeModal();
+        // Tutup modal jika user mengklik area luar modal (background gelap)
+        window.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal-overlay') || e.target.id === 'lids-modal') {
+                const activeModal = e.target.id ? e.target.id : e.target.closest('.modal-overlay').id;
+                closeModal(activeModal);
             }
         });
     </script>
