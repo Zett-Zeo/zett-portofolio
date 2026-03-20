@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth scroll-pt-16 md:scroll-pt-20">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <title>Z Portofolio</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#0f172a',
+                        brandGreen: '#10b981',
+                        brandBlue: '#3b82f6'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        html, body { 
+            max-width: 100%; 
+            overflow-x: hidden; 
+            background-color: #0f172a; 
+            color: #f8fafc; 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+        }
+        
+        .text-gradient {
+            background: linear-gradient(to right, #10b981, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .glass-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        @media (hover: hover) {
+            .glass-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.2);
+                border-color: rgba(16, 185, 129, 0.3);
+            }
+        }
+
+        .blob-bg {
+            position: absolute;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.4;
+            animation: float 10s infinite ease-in-out alternate;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px) scale(1); }
+            100% { transform: translateY(20px) scale(1.1); }
+        }
+
+        /* Styling untuk Language Toggle */
+        .lang-toggle-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+            width: 70px;
+            height: 32px;
+        }
+        
+        .lang-toggle-indicator {
+            position: absolute;
+            background: linear-gradient(to right, #10b981, #3b82f6);
+            border-radius: 16px;
+            height: 24px;
+            width: 30px;
+            transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            z-index: 1;
+        }
+        
+        .lang-text {
+            flex: 1;
+            text-align: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+            z-index: 2;
+            transition: color 0.3s ease;
+        }
+        
+        body.en-mode .lang-toggle-indicator { transform: translateX(30px); }
+        body.en-mode .lang-text.id-txt { color: #9ca3af; } 
+        body.en-mode .lang-text.en-txt { color: #ffffff; } 
+        
+        body:not(.en-mode) .lang-text.id-txt { color: #ffffff; }
+        body:not(.en-mode) .lang-text.en-txt { color: #9ca3af; }
+    </style>
+</head>
+<body class="antialiased selection:bg-brandGreen selection:text-white bg-darkBg">
+
+    <nav class="fixed w-full z-50 glass-card border-b-0 py-4 px-6 md:px-8 flex justify-between items-center">
+        <h1 class="text-xl font-bold tracking-wider text-gradient">Z Portofolio</h1>
+        
+        <div class="hidden md:flex gap-6 font-medium text-sm text-gray-300 items-center">
+            <a href="#home" class="hover:text-brandGreen transition lang-aware" data-en="Home">Beranda</a>
+            <a href="#about" class="hover:text-brandGreen transition lang-aware" data-en="About">Tentang</a>
+            <a href="#experience" class="hover:text-brandGreen transition lang-aware" data-en="Experience">Pengalaman</a>
+            <a href="#projects" class="hover:text-brandGreen transition lang-aware" data-en="Projects">Proyek</a>
+            
+            <div class="lang-toggle-btn ml-4" onclick="toggleLanguage()" title="Switch Language">
+                <div class="lang-toggle-indicator"></div>
+                <span class="lang-text id-txt">ID</span>
+                <span class="lang-text en-txt">EN</span>
+            </div>
+        </div>
+
+        <div class="md:hidden flex items-center gap-4">
+            <div class="lang-toggle-btn" onclick="toggleLanguage()">
+                <div class="lang-toggle-indicator"></div>
+                <span class="lang-text id-txt">ID</span>
+                <span class="lang-text en-txt">EN</span>
+            </div>
+            <button id="mobile-menu-btn" class="text-gray-300 hover:text-white focus:outline-none">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </div>
+    </nav>
+
+    <div id="mobile-menu" class="fixed top-[68px] left-0 w-full glass-card border-t border-white/10 flex flex-col items-center py-6 gap-6 z-40 transform -translate-y-[150%] transition-transform duration-300 md:hidden">
+        <a href="#home" class="mobile-link text-gray-300 hover:text-brandGreen transition lang-aware" data-en="Home">Beranda</a>
+        <a href="#about" class="mobile-link text-gray-300 hover:text-brandGreen transition lang-aware" data-en="About">Tentang</a>
+        <a href="#experience" class="mobile-link text-gray-300 hover:text-brandGreen transition lang-aware" data-en="Experience">Pengalaman</a>
+        <a href="#projects" class="mobile-link text-gray-300 hover:text-brandGreen transition lang-aware" data-en="Projects">Proyek</a>
+    </div>
+
+    <main class="relative w-full overflow-hidden">
+        
+        <div class="blob-bg w-72 h-72 md:w-96 md:h-96 bg-brandGreen rounded-full top-0 md:top-[-10%] left-[-20%] md:left-[-10%]"></div>
+        <div class="blob-bg w-72 h-72 md:w-96 md:h-96 bg-brandBlue rounded-full bottom-[20%] right-[-20%] md:right-[-10%]"></div>
+
+        <section id="home" class="min-h-screen flex items-center justify-center px-6 pt-20">
+            <div class="text-center max-w-3xl">
+                <p class="hero-elem text-brandGreen font-semibold mb-4 tracking-widest uppercase text-xs md:text-sm lang-aware" data-en="Hello, let me introduce myself">Halo, perkenalkan saya</p>
+                <h1 class="hero-elem text-5xl md:text-7xl font-bold mb-4 md:mb-6">Izzaddin H.</h1>
+                <h2 class="hero-elem text-2xl md:text-4xl font-bold text-gray-400 mb-6 md:mb-8 leading-tight">
+                    <span class="text-gradient">Chemical Analyst</span> <br class="md:hidden"> & System Integrator
+                </h2>
+                <p class="hero-elem text-gray-400 leading-relaxed mb-8 md:mb-10 text-sm md:text-lg lang-aware" data-en="A dedicated Chemical Analyst with 5 years of experience in the petrochemical industry. Fusing the precision of analytical science with technological innovation—leveraging IT, IoT, and AI-assisted coding as catalysts to independently revolutionize laboratory operational efficiency.">
+                    Analis Kimia berdedikasi dengan 5 tahun pengalaman di industri petrokimia. Memadukan ketelitian sains analitik dengan inovasi teknologi—menjadikan keahlian IT, IoT, dan AI-assisted coding sebagai katalisator untuk merevolusi efisiensi operasional laboratorium secara mandiri.
+                </p>
+                <div class="hero-elem flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <a href="#projects" class="w-full sm:w-auto px-8 py-3 rounded-full bg-gradient-to-r from-brandGreen to-brandBlue text-white font-semibold hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] transition text-center lang-aware" data-en="View Projects">
+                        Lihat Proyek
+                    </a>
+                    <a href="https://github.com/Zett-Zeo" target="_blank" class="w-full sm:w-auto px-8 py-3 rounded-full glass-card text-white font-semibold hover:bg-white/10 transition text-center">
+                        <i class="fab fa-github mr-2"></i> GitHub
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="py-16 md:py-24 px-6 md:px-20">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="section-title text-3xl md:text-4xl font-bold mb-10 md:mb-12 text-center text-gradient lang-aware" data-en="Skills & Technologies">Keahlian & Teknologi</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+                    <div class="skill-card glass-card p-6 md:p-8 rounded-2xl">
+                        <i class="fas fa-flask text-3xl md:text-4xl text-brandGreen mb-4"></i>
+                        <h3 class="text-lg md:text-xl font-bold mb-4 lang-aware" data-en="Chemical Analysis">Analisis Kimia</h3>
+                        <p class="text-gray-400 text-sm mb-4 lang-aware" data-en="Experienced in operating modern analytical instruments and conventional methods.">Berpengalaman mengoperasikan instrumen modern dan metode konvensional.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs text-brandGreen">HPLC</span>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs text-brandGreen">GC</span>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs text-brandGreen">AAS & ICPS</span>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs text-brandGreen">Malvern Particle Size</span>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs text-brandGreen">Gravimetri & Volumetri</span>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs text-brandGreen">Sampling Udara & Air</span>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs text-brandGreen">Auto-Titrator</span>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs text-brandGreen">Color & Visual</span>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs text-brandGreen">Utility Analysis</span>
+                        </div>
+                    </div>
+                    <div class="skill-card glass-card p-6 md:p-8 rounded-2xl">
+                        <i class="fas fa-code text-3xl md:text-4xl text-brandBlue mb-4"></i>
+                        <h3 class="text-lg md:text-xl font-bold mb-4">Web Development</h3>
+                        <p class="text-gray-400 text-sm mb-4 lang-aware" data-en="Developing efficient web applications and comprehensive reporting dashboards.">Mengembangkan aplikasi web dan dashboard pelaporan efisien.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs text-brandBlue">HTML & CSS</span>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs text-brandBlue">JavaScript</span>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs text-brandBlue">PHP</span>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs text-brandBlue">PostgreSQL</span>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs text-brandBlue">Macro VBA</span>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs text-brandBlue">AppScript</span>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs text-brandBlue">Linux Server</span>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs text-orange-400 border border-orange-500/30">ESP32 & IoT</span>
+                            <span class="px-3 py-1 bg-white/5 rounded-full text-xs text-purple-400 border border-purple-500/30">AI (Ollama)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="experience" class="py-16 md:py-24 px-6 md:px-20 bg-black/20">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="section-title text-3xl md:text-4xl font-bold mb-12 md:mb-16 text-center text-gradient lang-aware" data-en="Career Journey">Jejak Langkah</h2>
+                
+                <div class="relative border-l border-brandGreen/30 ml-4 md:ml-0">
+                    <div class="timeline-item mb-10 md:mb-12 ml-6 md:ml-8 relative">
+                        <div class="absolute -left-[31px] md:-left-[41px] top-1 w-4 h-4 md:w-5 md:h-5 bg-brandGreen rounded-full shadow-[0_0_10px_#10b981]"></div>
+                        <span class="text-xs md:text-sm text-brandGreen font-bold lang-aware" data-en="Aug 2021 - Present">Agt 2021 - Sekarang</span>
+                        <h3 class="text-lg md:text-xl font-bold mt-1 md:mt-2">Chemical Analyst</h3>
+                        <p class="text-gray-300 text-xs md:text-sm font-medium mt-1">Merak Chemicals Indonesia</p>
+                        <p class="text-gray-400 mt-2 md:mt-3 text-sm leading-relaxed lang-aware" data-en="Conducting Monomer (PTA) product and process support analysis using HPLC, GC, AAS, ICPS, and Malvern. Initiating lab efficiency through digital reporting and development of new analysis SOPs.">
+                            Melakukan analisis produk monomer (PTA) dan support process menggunakan HPLC, GC, AAS, ICPS, dan Malvern. Menginisiasi efisiensi lab dengan digitalisasi pelaporan dan pengembangan SOP analisis baru.
+                        </p>
+                    </div>
+
+                    <div class="timeline-item mb-10 md:mb-12 ml-6 md:ml-8 relative">
+                        <div class="absolute -left-[31px] md:-left-[41px] top-1 w-4 h-4 md:w-5 md:h-5 bg-brandBlue rounded-full shadow-[0_0_10px_#3b82f6]"></div>
+                        <span class="text-xs md:text-sm text-brandBlue font-bold lang-aware" data-en="2022 - Present">2022 - Sekarang</span>
+                        <h3 class="text-lg md:text-xl font-bold mt-1 md:mt-2 lang-aware" data-en="Management Bachelor's Degree Student">Mahasiswa S1 Manajemen</h3>
+                        <p class="text-gray-300 text-xs md:text-sm font-medium mt-1">Universitas Terbuka</p>
+                    </div>
+
+                    <div class="timeline-item mb-10 md:mb-12 ml-6 md:ml-8 relative">
+                        <div class="absolute -left-[31px] md:-left-[41px] top-1 w-4 h-4 md:w-5 md:h-5 bg-gray-500 rounded-full"></div>
+                        <span class="text-xs md:text-sm text-gray-400 font-bold">2017 - 2021</span>
+                        <h3 class="text-lg md:text-xl font-bold mt-1 md:mt-2 lang-aware" data-en="Analytical Chemistry Student">Siswa Analis Kimia</h3>
+                        <p class="text-gray-300 text-xs md:text-sm font-medium mt-1">SMK-SMAK Bogor</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="py-16 md:py-24 px-6 md:px-20">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="section-title text-3xl md:text-4xl font-bold mb-10 md:mb-12 text-center text-gradient lang-aware" data-en="Projects & Innovations">Proyek & Inovasi</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 md:gap-8">
+                    
+                    <div onclick="openModal('lids-modal')" class="project-card glass-card p-6 md:p-8 rounded-2xl group cursor-pointer relative overflow-hidden flex flex-col">
+                        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition">
+                            <i class="fas fa-server text-6xl md:text-8xl text-brandBlue"></i>
+                        </div>
+                        <h3 class="text-xl md:text-2xl font-bold mb-2 md:mb-3 relative z-10">LIDS Web App</h3>
+                        <p class="text-brandBlue text-xs md:text-sm mb-4 relative z-10 lang-aware" data-en="Digital Laboratory Ecosystem">Laboratorium Ekosistem Digital</p>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6 relative z-10 flex-grow lang-aware" data-en="An independent web system built on a scalable plugin architecture using PHP and PostgreSQL. Fully deployed on-premise using a local Linux Mint & Apache2 server.">
+                            Sistem web mandiri dengan arsitektur plugin terukur. Dibangun menggunakan PHP, PostgreSQL, dan di-deploy penuh secara on-premise pada server lokal Linux Mint & Apache2.
+                        </p>
+                        <div class="relative z-10 mt-auto pt-4 border-t border-white/10 flex justify-between items-center text-gray-500 group-hover:text-brandBlue transition-colors text-sm font-medium">
+                            <span class="lang-aware" data-en="Click to see the evolution">Klik untuk melihat evolusi</span>
+                            <i class="fas fa-arrow-right transform group-hover:translate-x-2 transition-transform"></i>
+                        </div>
+                    </div>
+
+                    <div onclick="openModal('hplc-modal')" class="project-card glass-card p-6 md:p-8 rounded-2xl group cursor-pointer relative overflow-hidden flex flex-col">
+                        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition">
+                            <i class="fas fa-stopwatch text-6xl md:text-8xl text-brandGreen"></i>
+                        </div>
+                        <h3 class="text-xl md:text-2xl font-bold mb-2 md:mb-3 relative z-10 lang-aware" data-en="HPLC Efficiency Innovation">Inovasi Efisiensi HPLC</h3>
+                        <p class="text-brandGreen text-xs md:text-sm mb-4 relative z-10 lang-aware" data-en="National Innovation Competition">Kompetisi Inovasi Nasional</p>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6 relative z-10 flex-grow lang-aware" data-en="Collaborated to reduce sample analysis retention time on HPLC instruments from 30 minutes to just 17 minutes per reading.">
+                            Kolaborasi menurunkan waktu retensi analisis sampel pada instrumen HPLC dari 30 menit menjadi hanya 17 menit untuk setiap kali pembacaan.
+                        </p>
+                        <div class="relative z-10 mt-auto pt-4 border-t border-white/10 flex justify-between items-center text-gray-500 group-hover:text-brandGreen transition-colors text-sm font-medium">
+                            <span class="lang-aware" data-en="Click for details">Klik untuk detail</span>
+                            <i class="fas fa-arrow-right transform group-hover:translate-x-2 transition-transform"></i>
+                        </div>
+                    </div>
+
+                    <div onclick="openModal('malvern-modal')" class="project-card glass-card p-6 md:p-8 rounded-2xl group cursor-pointer relative overflow-hidden flex flex-col">
+                        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition">
+                            <i class="fas fa-microscope text-6xl md:text-8xl text-gray-400"></i>
+                        </div>
+                        <h3 class="text-xl md:text-2xl font-bold mb-2 md:mb-3 relative z-10 lang-aware" data-en="Malvern Standardization">Standardisasi Malvern</h3>
+                        <p class="text-gray-300 text-xs md:text-sm font-medium mb-4 relative z-10 text-gradient lang-aware" data-en="Conditioning & Validation">Conditioning & Validasi</p>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6 relative z-10 flex-grow lang-aware" data-en="Led the conditioning, analysis method determination, and configuration of the Malvern Particle Size instrument. The comparison results were standardized into the official lab SOP.">
+                            Memimpin proses conditioning, penentuan cara analisis dan konfigurasi instrumen Malvern Particle Size. Hasil komparasi dibakukan menjadi SOP resmi untuk operasional lab.
+                        </p>
+                        <div class="relative z-10 mt-auto pt-4 border-t border-white/10 flex justify-between items-center text-gray-500 group-hover:text-gray-300 transition-colors text-sm font-medium">
+                            <span class="lang-aware" data-en="Click for details">Klik untuk detail</span>
+                            <i class="fas fa-arrow-right transform group-hover:translate-x-2 transition-transform"></i>
+                        </div>
+                    </div>
+
+                    <div onclick="openModal('elearning-modal')" class="project-card glass-card p-6 md:p-8 rounded-2xl group cursor-pointer relative overflow-hidden flex flex-col">
+                        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition">
+                            <i class="fas fa-chalkboard-teacher text-6xl md:text-8xl text-purple-400"></i>
+                        </div>
+                        <h3 class="text-xl md:text-2xl font-bold mb-2 md:mb-3 relative z-10 lang-aware" data-en="Private E-Learning Platform">Platform E-Learning Privat</h3>
+                        <p class="text-purple-400 text-xs md:text-sm mb-4 relative z-10 lang-aware" data-en="Client Project (Freelance)">Proyek Klien (Freelance)</p>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6 relative z-10 flex-grow lang-aware" data-en="A Learning Management System (LMS) web app tailored for a private tutor. Supports module management, interactive quizzes, video integration, agenda calendar, and a live chat room.">
+                            Aplikasi web pendamping belajar (LMS) pesanan klien (Guru Privat). Mendukung manajemen modul, kuis interaktif, integrasi video, kalender agenda, dan fitur <i>room chat</i>.
+                        </p>
+                        <div class="relative z-10 mt-auto pt-4 border-t border-white/10 flex justify-between items-center text-gray-500 group-hover:text-purple-400 transition-colors text-sm font-medium">
+                            <span class="lang-aware" data-en="Click for details">Klik untuk detail</span>
+                            <i class="fas fa-arrow-right transform group-hover:translate-x-2 transition-transform"></i>
+                        </div>
+                    </div>
+
+                    <div class="project-card glass-card p-6 md:p-8 rounded-2xl group relative overflow-hidden flex flex-col border border-white/10 hover:border-orange-500/50 transition-colors">
+                        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition">
+                            <i class="fas fa-microchip text-6xl md:text-8xl text-orange-400"></i>
+                        </div>
+                        <h3 class="text-xl md:text-2xl font-bold mb-2 md:mb-3 relative z-10">IoT & AI Integration</h3>
+                        <p class="text-orange-400 text-xs md:text-sm mb-4 relative z-10 font-medium lang-aware" data-en="R&D / Ongoing Project">R&D / Proyek Berjalan</p>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6 relative z-10 flex-grow lang-aware" data-en="Expanding the LIDS ecosystem into the IoT realm by assembling an ESP32 microcontroller and temp/humidity sensors. Data is sent automatically in real-time to PostgreSQL every hour for the Lab Monitoring Dashboard.">
+                            Mengembangkan ekosistem LIDS ke ranah IoT dengan merakit mikrokontroler <b>ESP32</b> dan sensor suhu/kelembapan. Data dikirim otomatis secara <i>real-time</i> ke PostgreSQL setiap jam untuk plugin <i>Lab Monitoring Dashboard</i>.
+                        </p>
+                        
+                        <div class="relative z-10 mt-auto pt-4 border-t border-white/10">
+                            <span class="text-gray-300 block mb-3 text-sm font-semibold lang-aware" data-en="Future Roadmap:">Rencana Kedepan:</span>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1 bg-orange-500/10 rounded-full text-xs text-orange-300 border border-orange-500/20">Offline AI (Ollama)</span>
+                                <span class="px-3 py-1 bg-orange-500/10 rounded-full text-xs text-orange-300 border border-orange-500/20 lang-aware" data-en="Data Analysis Assistant">Asisten Analisis Data</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+        
+        <footer class="bg-black/40 py-10 md:py-12 px-6 border-t border-white/10 text-center">
+            <h2 class="text-xl md:text-2xl font-bold mb-6 md:mb-8 lang-aware" data-en="Let's Connect">Mari Terhubung</h2>
+            <div class="flex flex-wrap justify-center gap-4 md:gap-6 mb-8">
+                <a href="mailto:ihendradi18@gmail.com" class="w-10 h-10 md:w-12 md:h-12 rounded-full glass-card flex items-center justify-center hover:text-brandGreen transition">
+                    <i class="fas fa-envelope text-lg md:text-xl"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/izzaddin-h" target="_blank" class="w-10 h-10 md:w-12 md:h-12 rounded-full glass-card flex items-center justify-center hover:text-brandBlue transition">
+                    <i class="fab fa-linkedin-in text-lg md:text-xl"></i>
+                </a>
+                <a href="https://github.com/Zett-Zeo" target="_blank" class="w-10 h-10 md:w-12 md:h-12 rounded-full glass-card flex items-center justify-center hover:text-gray-300 transition">
+                    <i class="fab fa-github text-lg md:text-xl"></i>
+                </a>
+                <a href="tel:089680052002" class="w-10 h-10 md:w-12 md:h-12 rounded-full glass-card flex items-center justify-center hover:text-brandGreen transition">
+                    <i class="fas fa-phone text-lg md:text-xl"></i>
+                </a>
+            </div>
+            <p class="text-gray-600 text-xs md:text-sm">© <span id="year">2026</span> Izzaddin H.</p>
+        </footer>
+
+    </main> 
+
+    <div id="lids-modal" class="modal-overlay fixed inset-0 z-[100] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 backdrop-blur-sm bg-black/60 p-4">
+        <div class="modal-content glass-card w-full max-w-5xl max-h-[90vh] overflow-y-auto rounded-3xl p-6 md:p-10 relative transform scale-95 transition-transform duration-300">
+            <button onclick="closeModal('lids-modal')" class="absolute top-4 right-4 md:top-6 md:right-6 text-gray-400 hover:text-white transition w-10 h-10 rounded-full bg-white/10 flex items-center justify-center z-20">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            <h2 class="text-3xl md:text-4xl font-bold mb-2 text-gradient pr-10 lang-aware" data-en="LIDS: SDLC & System Evolution">LIDS: SDLC & Evolusi Sistem</h2>
+            <p class="text-gray-400 mb-8 text-sm md:text-base border-b border-white/10 pb-6 lang-aware" data-en="A digital transformation journey from simple Excel macro modifications into an integrated independent web ecosystem.">Perjalanan transformasi digital dari modifikasi makro Excel sederhana menjadi ekosistem web mandiri terintegrasi.</p>
+
+            <div class="space-y-10 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-brandBlue before:to-transparent">
+                
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-darkBg bg-green-600 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <i class="fas fa-file-excel text-sm"></i>
+                    </div>
+                    <div class="w-[calc(100%-3.5rem)] md:w-[calc(50%-2.5rem)] glass-card p-5 md:p-6 rounded-2xl">
+                        <h4 class="font-bold text-green-500 mb-2 text-base md:text-lg lang-aware" data-en="Phase 1: Standardization & Visualization">Fase 1: Standardisasi & Visualisasi</h4>
+                        <ul class="list-disc list-inside text-sm text-gray-300 space-y-2 lang-aware" data-en="<li>Normalized fragmented annual reporting files (Hatto Hiyari) into a sustainable Single Source of Truth database.</li><li>Developed an interactive reporting dashboard utilizing Excel VBA Macros.</li><li>Implemented automated time filters and statistical calculations visualized via Bar & Donut charts.</li>">
+                            <li>Menormalisasi file pelaporan (Hatto Hiyari) yang terfragmentasi tahunan menjadi satu <i>Single Source of Truth</i> berbasis database berkelanjutan.</li>
+                            <li>Mengembangkan dashboard pelaporan interaktif memanfaatkan Excel VBA Macro.</li>
+                            <li>Mengimplementasikan automasi filter waktu dan kalkulasi statistik otomatis yang disajikan via visualisasi grafik (Bar & Donut chart).</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-darkBg bg-yellow-500 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <i class="fab fa-google text-sm"></i>
+                    </div>
+                    <div class="w-[calc(100%-3.5rem)] md:w-[calc(50%-2.5rem)] glass-card p-5 md:p-6 rounded-2xl">
+                        <h4 class="font-bold text-yellow-500 mb-2 text-base md:text-lg lang-aware" data-en="Phase 2: Cloud Scalability & Sync">Fase 2: Skalabilitas Cloud & Sinkronisasi</h4>
+                        <ul class="list-disc list-inside text-sm text-gray-300 space-y-2 lang-aware" data-en="<li>Addressed hardware limitations (PC input queues) by migrating to the Google Workspace ecosystem (Forms & Sheets).</li><li>Built lab-scale data routing automation using Google Apps Script.</li><li>Unified three crucial data streams (Hatto Hiyari, KYT, and Trouble Reports) into a single Centralized Analytics Dashboard.</li>">
+                            <li>Merespons kendala limitasi perangkat keras (antrean input PC) dengan bermigrasi ke ekosistem Google Workspace (Forms & Sheets).</li>
+                            <li>Membangun automasi <i>data routing</i> skala lab menggunakan Google Apps Script.</li>
+                            <li>Menyatukan tiga aliran data krusial (Hatto Hiyari, KYT, dan Trouble Report) ke dalam satu <i>Centralized Dashboard</i> analitik.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-4 border-darkBg bg-brandBlue text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                        <i class="fas fa-server text-sm"></i>
+                    </div>
+                    <div class="w-[calc(100%-3.5rem)] md:w-[calc(50%-2.5rem)] glass-card p-5 md:p-6 rounded-2xl">
+                        <h4 class="font-bold text-brandBlue mb-2 text-base md:text-lg lang-aware" data-en="Phase 3: Plugin Architecture & On-Premise">Fase 3: Arsitektur Plugin & On-Premise Server</h4>
+                        <ul class="list-disc list-inside text-sm text-gray-300 space-y-2 lang-aware" data-en="<li>Evaluated suboptimal mobile UI and mitigated third-party app restrictions by designing an independent Full Custom Web system (PHP, JS, Tailwind) paired with a PostgreSQL relational database.</li><li>Innovated a Plugin Architecture for Form Builder, Report Bank, My Report, and Approval Workflows, allowing new modules to load without altering the core system.</li><li>Executed SysAdmin/DevOps roles: repurposed a used PC into a local On-Premise server running Linux Mint and Apache2.</li>">
+                            <li>Mengevaluasi UI mobile yang suboptimal dan menekan pembatasan aplikasi pihak ketiga dengan merancang sistem <i>Full Custom Web</i> secara mandiri (PHP, JS, Tailwind) beserta database relasional PostgreSQL.</li>
+                            <li>Berinovasi menciptakan wadah <b>Arsitektur Plugin</b> untuk Form Builder, Report Bank, My Report, dan Approval Workflow, sehingga aplikasi baru dapat dimuat (*load*) tanpa merombak sistem induk.</li>
+                            <li>Mengeksekusi peran SysAdmin/DevOps: menyulap PC bekas menjadi lokal server (On-Premise) dengan OS Linux Mint dan web server Apache2.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                
+                <div onclick="openImageModal('assets/lids-home.png')" class="rounded-xl border border-white/10 overflow-hidden relative group aspect-video bg-black/50 cursor-pointer">
+                    <img src="assets/lids-home.png" alt="LIDS Home" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px]">
+                        <i class="fas fa-search-plus text-4xl text-white drop-shadow-lg"></i>
+                    </div>
+                </div>
+
+                <div onclick="openImageModal('assets/lids-sidebar.png')" class="rounded-xl border border-white/10 overflow-hidden relative group aspect-video bg-black/50 cursor-pointer">
+                    <img src="assets/lids-sidebar.png" alt="LIDS Sidebar" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px]">
+                        <i class="fas fa-search-plus text-4xl text-white drop-shadow-lg"></i>
+                    </div>
+                </div>
+
+                <div onclick="openImageModal('assets/lids-form.png')" class="rounded-xl border border-white/10 overflow-hidden relative group aspect-video bg-black/50 cursor-pointer">
+                    <img src="assets/lids-form.png" alt="LIDS Form" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px]">
+                        <i class="fas fa-search-plus text-4xl text-white drop-shadow-lg"></i>
+                    </div>
+                </div>
+
+                <div onclick="openImageModal('assets/lids-dashboard.png')" class="rounded-xl border border-white/10 overflow-hidden relative group aspect-video bg-black/50 cursor-pointer">
+                    <img src="assets/lids-dashboard.png" alt="LIDS Dashboard" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px]">
+                        <i class="fas fa-search-plus text-4xl text-white drop-shadow-lg"></i>
+                    </div>
+                </div>
+
+                <div onclick="openImageModal('assets/lids-myreport.png')" class="rounded-xl border border-white/10 overflow-hidden relative group aspect-video bg-black/50 cursor-pointer">
+                    <img src="assets/lids-myreport.png" alt="LIDS My Report" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px]">
+                        <i class="fas fa-search-plus text-4xl text-white drop-shadow-lg"></i>
+                    </div>
+                </div>
+
+                <div onclick="openImageModal('assets/lids-reportbank.png')" class="rounded-xl border border-white/10 overflow-hidden relative group aspect-video bg-black/50 cursor-pointer">
+                    <img src="assets/lids-reportbank.png" alt="LIDS Report Bank" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px]">
+                        <i class="fas fa-search-plus text-4xl text-white drop-shadow-lg"></i>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="hplc-modal" class="modal-overlay fixed inset-0 z-[100] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 backdrop-blur-sm bg-black/60 p-4">
+        <div class="modal-content glass-card w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-3xl p-6 md:p-8 relative transform scale-95 transition-transform duration-300">
+            <button onclick="closeModal('hplc-modal')" class="absolute top-4 right-4 md:top-6 md:right-6 text-gray-400 hover:text-white transition w-10 h-10 rounded-full bg-white/10 flex items-center justify-center z-20">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            <h2 class="text-2xl md:text-3xl font-bold mb-2 text-brandGreen pr-10 lang-aware" data-en="HPLC Analysis Efficiency">Efisiensi Analisis HPLC</h2>
+            <p class="text-gray-400 mb-6 text-sm md:text-base lang-aware" data-en="National Level Innovation Competition">Kompetisi Inovasi Tingkat Nasional</p>
+            <div class="space-y-4 md:space-y-6 text-gray-300 text-sm md:text-base leading-relaxed">
+                <p class="lang-aware" data-en="Together with the laboratory team, we analyzed the ongoing testing methods and identified a bottleneck in the reading time of the HPLC instrument.">Bersama tim laboratorium, kami menganalisis metode pengujian yang sedang berjalan dan menemukan <i>bottleneck</i> pada waktu pembacaan instrumen HPLC.</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 my-6">
+                    <div class="bg-white/5 p-4 rounded-xl border border-white/10 text-center">
+                        <span class="block text-xs md:text-sm text-gray-400 mb-1 lang-aware" data-en="Initial Retention Time">Retention Time Awal</span>
+                        <span class="text-2xl md:text-3xl font-bold text-red-400 lang-aware" data-en="30 Minutes">30 Menit</span>
+                    </div>
+                    <div class="bg-white/5 p-4 rounded-xl border border-brandGreen/30 text-center">
+                        <span class="block text-xs md:text-sm text-gray-400 mb-1 lang-aware" data-en="Optimized Retention Time">Retention Time Baru</span>
+                        <span class="text-2xl md:text-3xl font-bold text-brandGreen lang-aware" data-en="17 Minutes">17 Menit</span>
+                    </div>
+                </div>
+                <p class="lang-aware" data-en="Through parameter optimization, we significantly reduced the retention time, saved chemical solvents, and successfully advanced to the national innovation competition.">Melalui optimasi parameter, kami menekan <i>retention time</i> secara signifikan, menghemat pelarut kimia, dan menembus kompetisi inovasi nasional.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="malvern-modal" class="modal-overlay fixed inset-0 z-[100] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 backdrop-blur-sm bg-black/60 p-4">
+        <div class="modal-content glass-card w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-3xl p-6 md:p-8 relative transform scale-95 transition-transform duration-300">
+            <button onclick="closeModal('malvern-modal')" class="absolute top-4 right-4 md:top-6 md:right-6 text-gray-400 hover:text-white transition w-10 h-10 rounded-full bg-white/10 flex items-center justify-center z-20">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            <h2 class="text-2xl md:text-3xl font-bold mb-2 text-gray-200 pr-10 lang-aware" data-en="Malvern Standardization">Standardisasi Malvern</h2>
+            <p class="text-gray-400 mb-6 text-sm md:text-base lang-aware" data-en="Instrument Validation & SOP Creation 2023">Validasi Instrumen & Pembuatan SOP Tahun 2023</p>
+            <div class="space-y-4 md:space-y-6 text-gray-300 text-sm md:text-base leading-relaxed">
+                <p class="lang-aware" data-en="In 2023, the laboratory transitioned from using conventional Robot Sifters to a modern analytical instrument, the Malvern Particle Size Analyzer.">Pada tahun 2023, laboratorium beralih dari penggunaan alat <i>Robot Sifter</i> konvensional ke instrumen analitik modern, Malvern Particle Size Analyzer.</p>
+                <ul class="list-disc list-inside space-y-3 ml-2 text-gray-400 lang-aware" data-en="<li><strong class='text-white'>Instrument Conditioning:</strong> Initial installation and system parameter configuration.</li><li><strong class='text-white'>Method Comparison:</strong> Parallel sample testing between the old Robot Sifter and the new Malvern.</li><li><strong class='text-white'>SOP Drafting:</strong> Standardizing optimal parameters into the official operational SOP document.</li>">
+                    <li><strong class="text-white">Conditioning Alat:</strong> Instalasi awal dan konfigurasi parameter sistem.</li>
+                    <li><strong class="text-white">Komparasi Metode:</strong> Uji sampel paralel antara <i>Robot Sifter</i> lama dan <i>Malvern</i> baru.</li>
+                    <li><strong class="text-white">Penyusunan SOP:</strong> Membakukan parameter optimal ke dalam dokumen SOP resmi.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="elearning-modal" class="modal-overlay fixed inset-0 z-[100] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 backdrop-blur-sm bg-black/60 p-4">
+        <div class="modal-content glass-card w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-3xl p-6 md:p-8 relative transform scale-95 transition-transform duration-300">
+            <button onclick="closeModal('elearning-modal')" class="absolute top-4 right-4 md:top-6 md:right-6 text-gray-400 hover:text-white transition w-10 h-10 rounded-full bg-white/10 flex items-center justify-center z-20">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            <h2 class="text-2xl md:text-3xl font-bold mb-2 text-purple-400 pr-10 lang-aware" data-en="Private E-Learning Platform">Platform E-Learning Privat</h2>
+            <p class="text-gray-400 mb-6 text-sm md:text-base border-b border-white/10 pb-6 lang-aware" data-en="Development of a Web-Based Learning Management System (LMS) for an External Client.">Pengembangan Sistem Manajemen Pembelajaran (LMS) Berbasis Web untuk Klien Eksternal.</p>
+            
+            <div class="space-y-6 text-gray-300 text-sm md:text-base leading-relaxed">
+                <p class="lang-aware" data-en="In addition to developing internal laboratory systems, I also handle projects from external clients. This project is an independent web platform specifically designed to facilitate the teaching and learning activities of a private tutor.">Selain mengembangkan sistem internal laboratorium, saya juga menangani proyek dari klien eksternal. Proyek ini adalah sebuah platform web mandiri yang dirancang khusus untuk memfasilitasi kegiatan belajar mengajar seorang guru privat.</p>
+                
+                <h3 class="text-lg font-bold text-white mt-6 mb-3 lang-aware" data-en="Core Features:">Fitur Utama:</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div class="bg-white/5 p-4 rounded-xl border border-white/10">
+                        <i class="fas fa-book-open text-purple-400 mb-2 text-xl"></i>
+                        <h4 class="font-bold text-white mb-1 lang-aware" data-en="Content Management">Manajemen Konten</h4>
+                        <p class="text-sm text-gray-400 lang-aware" data-en="Tutors can upload material modules, create interactive quizzes, and embed YouTube video links directly.">Guru dapat mengunggah modul materi, membuat kuis interaktif, dan menyematkan (<i>embed</i>) link video YouTube secara langsung.</p>
+                    </div>
+                    <div class="bg-white/5 p-4 rounded-xl border border-white/10">
+                        <i class="fas fa-comments text-brandBlue mb-2 text-xl"></i>
+                        <h4 class="font-bold text-white mb-1 lang-aware" data-en="Integrated Chat Room">Room Chat Terintegrasi</h4>
+                        <p class="text-sm text-gray-400 lang-aware" data-en="A two-way communication feature that allows direct Q&A interaction between the tutor and students within the platform.">Fitur komunikasi dua arah yang memungkinkan interaksi tanya jawab antara guru dan murid secara langsung di dalam platform.</p>
+                    </div>
+                    <div class="bg-white/5 p-4 rounded-xl border border-white/10">
+                        <i class="fas fa-calendar-alt text-brandGreen mb-2 text-xl"></i>
+                        <h4 class="font-bold text-white mb-1 lang-aware" data-en="Agenda Calendar">Kalender Agenda</h4>
+                        <p class="text-sm text-gray-400 lang-aware" data-en="A scheduling system that makes it easy for tutors and students to monitor class sessions or assignment deadlines.">Sistem penjadwalan yang memudahkan guru dan murid memantau jadwal sesi kelas atau <i>deadline</i> tugas.</p>
+                    </div>
+                    <div class="bg-white/5 p-4 rounded-xl border border-white/10">
+                        <i class="fas fa-cloud-upload-alt text-yellow-500 mb-2 text-xl"></i>
+                        <h4 class="font-bold text-white mb-1 lang-aware" data-en="Cloud Deployment">Cloud Deployment</h4>
+                        <p class="text-sm text-gray-400 lang-aware" data-en="Built with pure PHP & MySQL, then deployed live using a public hosting service (Hostinger).">Dibangun dengan PHP murni & MySQL, lalu di-<i>deploy</i> secara <i>live</i> menggunakan layanan hosting publik (Hostinger).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="image-modal" class="modal-overlay fixed inset-0 z-[120] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 backdrop-blur-md bg-black/90 p-4">
+        <button onclick="closeModal('image-modal')" class="absolute top-4 right-4 md:top-8 md:right-8 text-gray-400 hover:text-white transition w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/10 flex items-center justify-center z-20">
+            <i class="fas fa-times text-xl md:text-2xl"></i>
+        </button>
+        <div class="modal-content relative w-full max-w-6xl max-h-[90vh] flex justify-center items-center transform scale-95 transition-transform duration-300">
+            <img id="modal-image-display" src="" alt="Full Screen Preview" class="max-w-full max-h-[90vh] object-contain rounded-xl shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/10">
+        </div>
+    </div>
+
+    <script>
+        // Language Toggling Logic
+        const langElements = document.querySelectorAll('.lang-aware');
+        const body = document.body;
+        
+        // 1. Simpan teks original (ID) ke dataset saat pertama kali load
+        langElements.forEach(el => {
+            el.dataset.id = el.innerHTML;
+        });
+
+        // 2. Cek apakah user sebelumnya sudah pernah memilih bahasa Inggris (Mengingat Memori)
+        const savedLang = localStorage.getItem('portfolioLang');
+        if (savedLang === 'en') {
+            body.classList.add('en-mode');
+            langElements.forEach(el => {
+                el.innerHTML = el.dataset.en; // Langsung render EN jika sebelumnya bahasa Inggris
+            });
+        }
+
+        // 3. Fungsi saat tombol Toggle diklik (Instan tanpa merusak animasi GSAP)
+        function toggleLanguage() {
+            body.classList.toggle('en-mode');
+            const isEnglish = body.classList.contains('en-mode');
+
+            // Simpan pilihan ke memori browser agar diingat saat di-refresh
+            localStorage.setItem('portfolioLang', isEnglish ? 'en' : 'id');
+
+            // Ganti teks
+            langElements.forEach(el => {
+                el.innerHTML = isEnglish ? el.dataset.en : el.dataset.id;
+            });
+        }
+
+        // Auto-update copyright year
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Mobile Menu Logic
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+        let isMenuOpen = false;
+
+        function toggleMenu() {
+            isMenuOpen = !isMenuOpen;
+            if(isMenuOpen) {
+                // BUKA MENU
+                mobileMenu.classList.remove('-translate-y-[150%]');
+                mobileMenuBtn.innerHTML = '<i class="fas fa-times text-2xl"></i>';
+            } else {
+                // TUTUP MENU
+                mobileMenu.classList.add('-translate-y-[150%]');
+                mobileMenuBtn.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
+            }
+        }
+
+        // Fungsi khusus agar tidak bentrok saat klik link
+        function closeMenuSmoothly() {
+            if (isMenuOpen) {
+                isMenuOpen = false;
+                mobileMenu.classList.add('-translate-y-[150%]');
+                mobileMenuBtn.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
+            }
+        }
+
+        // Tombol Hamburger diklik
+        mobileMenuBtn.addEventListener('click', toggleMenu);
+
+        // Link di dalam Sidebar diklik
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                setTimeout(() => {
+                    closeMenuSmoothly();
+                }, 150);
+            });
+        });
+
+        // GSAP Animations
+        gsap.registerPlugin(ScrollTrigger);
+
+        if(document.querySelector(".hero-elem")) {
+            gsap.from(".hero-elem", { y: 30, opacity: 0, duration: 1, stagger: 0.2, ease: "power3.out", delay: 0.1 });
+        }
+
+        gsap.utils.toArray(".section-title").forEach(title => {
+            gsap.from(title, {
+                scrollTrigger: { trigger: title, start: "top 85%", toggleActions: "play none none reverse" },
+                y: 20, opacity: 0, duration: 0.8, ease: "power2.out"
+            });
+        });
+
+        gsap.from(".skill-card", {
+            scrollTrigger: { trigger: "#about", start: "top 80%" },
+            y: 40, opacity: 0, duration: 0.8, stagger: 0.2, ease: "back.out(1.5)", clearProps: "all"
+        });
+
+        gsap.utils.toArray(".timeline-item").forEach((item, i) => {
+            gsap.from(item, {
+                scrollTrigger: { trigger: item, start: "top 85%" },
+                x: -20, opacity: 0, duration: 0.6, ease: "power2.out"
+            });
+        });
+
+        gsap.from(".project-card", {
+            scrollTrigger: { trigger: "#projects", start: "top 80%" },
+            scale: 0.95, opacity: 0, duration: 0.8, stagger: 0.2, ease: "power3.out", clearProps: "all"
+        });
+
+        // Modal Logic
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            const modalContent = modal.querySelector('.modal-content');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modalContent.classList.remove('scale-95');
+            modalContent.classList.add('scale-100');
+            document.body.style.overflow = 'hidden'; 
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            const modalContent = modal.querySelector('.modal-content');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+            document.body.style.overflow = 'auto'; 
+        }
+
+        // Fungsi khusus untuk Lightbox Gambar
+        function openImageModal(imgSrc) {
+            // 1. Ganti src gambar di dalam pop-up sesuai dengan foto yang diklik
+            document.getElementById('modal-image-display').src = imgSrc;
+            // 2. Tampilkan pop-up nya
+            openModal('image-modal');
+        }
+
+        window.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal-overlay')) {
+                closeModal(e.target.id);
+            }
+        });
+    </script>
+</body>
+</html>
