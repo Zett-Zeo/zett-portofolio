@@ -593,34 +593,37 @@
         function toggleMenu() {
             isMenuOpen = !isMenuOpen;
             if(isMenuOpen) {
-                // BUKA MENU
                 mobileMenu.classList.remove('-translate-y-[150%]');
                 mobileMenuBtn.innerHTML = '<i class="fas fa-times text-2xl"></i>';
             } else {
-                // TUTUP MENU
                 mobileMenu.classList.add('-translate-y-[150%]');
                 mobileMenuBtn.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
             }
         }
 
-        // Fungsi khusus agar tidak bentrok saat klik link
-        function closeMenuSmoothly() {
-            if (isMenuOpen) {
-                isMenuOpen = false;
-                mobileMenu.classList.add('-translate-y-[150%]');
-                mobileMenuBtn.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
-            }
-        }
-
-        // Tombol Hamburger diklik
         mobileMenuBtn.addEventListener('click', toggleMenu);
 
-        // Link di dalam Sidebar diklik
+        // Perbaikan Bug Mobile Scroll (Sequential Animation)
         mobileLinks.forEach(link => {
-            link.addEventListener('click', () => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault(); // 1. Cegah lompatan scroll bawaan browser
+
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+
+                // 2. Tutup sidebar seketika
+                if(isMenuOpen) {
+                    isMenuOpen = false;
+                    mobileMenu.classList.add('-translate-y-[150%]');
+                    mobileMenuBtn.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
+                }
+
+                // 3. Tunggu sidebar selesai naik (300ms), baru eksekusi scroll
                 setTimeout(() => {
-                    closeMenuSmoothly();
-                }, 150);
+                    if(targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }, 300);
             });
         });
 
