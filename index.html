@@ -587,45 +587,23 @@
         // Mobile Menu Logic
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
-        const mobileLinks = document.querySelectorAll('.mobile-link');
         let isMenuOpen = false;
 
         function toggleMenu() {
             isMenuOpen = !isMenuOpen;
             if(isMenuOpen) {
+                // Buka Sidebar
                 mobileMenu.classList.remove('-translate-y-[150%]');
                 mobileMenuBtn.innerHTML = '<i class="fas fa-times text-2xl"></i>';
             } else {
+                // Tutup Sidebar
                 mobileMenu.classList.add('-translate-y-[150%]');
                 mobileMenuBtn.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
             }
         }
 
+        // Jalankan fungsi hanya saat tombol hamburger/X diklik
         mobileMenuBtn.addEventListener('click', toggleMenu);
-
-        // Perbaikan Bug Mobile Scroll (Sequential Animation)
-        mobileLinks.forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault(); // 1. Cegah lompatan scroll bawaan browser
-
-                const targetId = this.getAttribute('href');
-                const targetElement = document.querySelector(targetId);
-
-                // 2. Tutup sidebar seketika
-                if(isMenuOpen) {
-                    isMenuOpen = false;
-                    mobileMenu.classList.add('-translate-y-[150%]');
-                    mobileMenuBtn.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
-                }
-
-                // 3. Tunggu sidebar selesai naik (300ms), baru eksekusi scroll
-                setTimeout(() => {
-                    if(targetElement) {
-                        targetElement.scrollIntoView({ behavior: 'smooth' });
-                    }
-                }, 300);
-            });
-        });
 
         // GSAP Animations
         gsap.registerPlugin(ScrollTrigger);
