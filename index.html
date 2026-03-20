@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" class="scroll-smooth">
+<html lang="id" class="scroll-smooth scroll-pt-16 md:scroll-pt-20">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -161,10 +161,10 @@
                 <p class="hero-elem text-brandGreen font-semibold mb-4 tracking-widest uppercase text-xs md:text-sm lang-aware" data-en="Hello, let me introduce myself">Halo, perkenalkan saya</p>
                 <h1 class="hero-elem text-5xl md:text-7xl font-bold mb-4 md:mb-6">Izzaddin H.</h1>
                 <h2 class="hero-elem text-2xl md:text-4xl font-bold text-gray-400 mb-6 md:mb-8 leading-tight">
-                    <span class="text-gradient">Chemical Analyst</span> <br class="md:hidden"> & Web Developer
+                    <span class="text-gradient">Chemical Analyst</span> <br class="md:hidden"> & System Integrator
                 </h2>
-                <p class="hero-elem text-gray-400 leading-relaxed mb-8 md:mb-10 text-sm md:text-lg lang-aware" data-en="Fusing the precision of chemical laboratory analysis with the creativity and efficiency of web technology. Armed with 5 years of industrial experience.">
-                    Memadukan ketelitian dan akurasi analisis kimia di laboratorium dengan kreativitas serta efisiensi teknologi web. Memiliki pengalaman 5 tahun di industri.
+                <p class="hero-elem text-gray-400 leading-relaxed mb-8 md:mb-10 text-sm md:text-lg lang-aware" data-en="A dedicated Chemical Analyst with 5 years of experience in the petrochemical industry. Fusing the precision of analytical science with technological innovation—leveraging IT, IoT, and AI-assisted coding as catalysts to independently revolutionize laboratory operational efficiency.">
+                    Analis Kimia berdedikasi dengan 5 tahun pengalaman di industri petrokimia. Memadukan ketelitian sains analitik dengan inovasi teknologi—menjadikan keahlian IT, IoT, dan AI-assisted coding sebagai katalisator untuk merevolusi efisiensi operasional laboratorium secara mandiri.
                 </p>
                 <div class="hero-elem flex flex-col sm:flex-row gap-4 justify-center items-center">
                     <a href="#projects" class="w-full sm:w-auto px-8 py-3 rounded-full bg-gradient-to-r from-brandGreen to-brandBlue text-white font-semibold hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] transition text-center lang-aware" data-en="View Projects">
@@ -593,18 +593,34 @@
         function toggleMenu() {
             isMenuOpen = !isMenuOpen;
             if(isMenuOpen) {
+                // BUKA MENU
                 mobileMenu.classList.remove('-translate-y-[150%]');
                 mobileMenuBtn.innerHTML = '<i class="fas fa-times text-2xl"></i>';
             } else {
+                // TUTUP MENU
                 mobileMenu.classList.add('-translate-y-[150%]');
                 mobileMenuBtn.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
             }
         }
 
+        // Fungsi khusus agar tidak bentrok saat klik link
+        function closeMenuSmoothly() {
+            if (isMenuOpen) {
+                isMenuOpen = false;
+                mobileMenu.classList.add('-translate-y-[150%]');
+                mobileMenuBtn.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
+            }
+        }
+
+        // Tombol Hamburger diklik
         mobileMenuBtn.addEventListener('click', toggleMenu);
+
+        // Link di dalam Sidebar diklik
         mobileLinks.forEach(link => {
             link.addEventListener('click', () => {
-                if(isMenuOpen) toggleMenu();
+                setTimeout(() => {
+                    closeMenuSmoothly();
+                }, 150);
             });
         });
 
