@@ -1,0 +1,6 @@
+Commit Note :
+
+Adding Some Content and found mobile sidebar bug,
+try to fix this bug
+
+*I forgot to write comment when git commit until v1.1.004
