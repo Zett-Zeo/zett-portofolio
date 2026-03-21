@@ -1,0 +1,6 @@
+Commit Note :
+
+Still Trying Fixing Siderbar Mobile Bug,
+This Time I Try Use Sequence Methode For Auto Closing It
+
+*I forgot to write comment when git commit until v1.1.004
