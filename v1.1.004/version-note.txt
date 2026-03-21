@@ -1,0 +1,6 @@
+Commit Note :
+
+Final fixing for sidebar mobile
+I decided to temporary not use auto close sidebar
+
+*I forgot to write comment when git commit until v1.1.004
