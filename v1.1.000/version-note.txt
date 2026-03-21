@@ -1,0 +1,5 @@
+Commit Note :
+
+Updating Content, Insert Picture, Insert Favicon
+
+*I forgot to write comment when git commit until v1.1.004
