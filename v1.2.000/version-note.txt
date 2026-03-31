@@ -1,0 +1,5 @@
+Portofolio V1.2.000
+
+- Update Isi Pengalaman Kerja
+- Update Isi Pengalaman Sekolah
+- Ganti tombol github jadi tombol pengalaman
